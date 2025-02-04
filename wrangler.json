@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "r2-api-sandra",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-02-03",
+
+  "r2_buckets": [
+    {
+      "binding": "R2_BUCKET",
+      "bucket_name": "sandra-bucket"
+    }
+  ]
+}
