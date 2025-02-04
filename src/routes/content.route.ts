@@ -40,8 +40,6 @@ app.post("/edit", async (c) => {
     return c.json("File uploaded is not a file", 400);
   }
 
-  console.log(file.name);
-
   const r2Object = await c.env.R2_BUCKET.put(file.name, file);
   if (!r2Object) {
     console.error("Failed upload to R2", r2Object);
