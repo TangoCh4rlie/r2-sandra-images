@@ -1,19 +1,21 @@
-import { Hono } from "hono/quick";
-import { Bindings } from "../models/bindings.model";
-import { sign } from "hono/jwt";
-import { setCookie } from "hono/cookie";
+import { Hono } from 'hono/quick';
+import { Bindings } from '../models/bindings.model';
+import { sign } from 'hono/jwt';
+import { setCookie } from 'hono/cookie';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.post("/login", async (c) => {
+app.post('/login', async (c) => {
   const { username, password } = await c.req.json();
 
   if (username !== c.env.USERNAME) {
-    return c.json("Not found", 404);
+    const message = 'Unknow username';
+    return c.json(message, 404);
   }
 
   if (password !== c.env.PASSWORD) {
-    return c.json("Wrong password", 403);
+    const message = 'Wrong password';
+    return c.json(message, 403);
   }
 
   const token = await sign({ username }, c.env.JWT_SECRET_KEY);
