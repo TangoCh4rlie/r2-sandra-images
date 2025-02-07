@@ -6,16 +6,19 @@ import { setCookie } from 'hono/cookie';
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.post('/login', async (c) => {
-  const { username, password } = await c.req.json();
+  const { body } = await c.req.json();
 
-  if (username !== c.env.USERNAME) {
+  const username: string = body.username;
+  const password: string = body.password;
+
+  if (!username || username != c.env.USERNAME) {
     const message = 'Unknow username';
-    return c.json(message, 404);
+    return c.json({ success: true, message }, 404);
   }
 
-  if (password !== c.env.PASSWORD) {
+  if (!password || password !== c.env.PASSWORD) {
     const message = 'Wrong password';
-    return c.json(message, 403);
+    return c.json({ success: true, message }, 403);
   }
 
   const token = await sign({ username }, c.env.JWT_SECRET_KEY);
@@ -33,6 +36,15 @@ app.post('/login', async (c) => {
   });
 
   return c.json({ token });
+});
+
+app.get('/logout', (c) => {
+  setCookie(c, 'token', 'none', {
+    expires: new Date(Date.now() + 5 * 1000), // expire after 5 seconds
+    httpOnly: true,
+  });
+
+  return c.json({ success: true, message: 'User logout successfully' }, 200);
 });
 
 export default app;
