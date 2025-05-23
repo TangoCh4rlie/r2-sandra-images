@@ -41,8 +41,6 @@ app.post('/edit', async (c) => {
 	const body = await c.req.parseBody();
 	const file = body['content'];
 
-	console.log(body['test']);
-
 	if (!file || !(file instanceof File)) {
 		console.error('File uploaded is not a file');
 		return c.json('File uploaded is not a file', 400);
